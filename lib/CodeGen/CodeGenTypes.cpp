@@ -512,6 +512,11 @@ llvm::Type *CodeGenTypes::ConvertType(QualType T) {
     ResultType = llvm::PointerType::get(PointeeType, AS);
     break;
   }
+  case Type::TypeVariable: {
+    // This will convert to void*
+    ResultType = llvm::Type::getInt8PtrTy(getLLVMContext());
+    break;
+  }
 
   case Type::VariableArray: {
     const VariableArrayType *A = cast<VariableArrayType>(Ty);

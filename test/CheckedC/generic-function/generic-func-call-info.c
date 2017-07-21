@@ -7,14 +7,6 @@
 //
 // RUN: %clang_cc1 -ast-dump -fcheckedc-extension %s | FileCheck %s
 
-<<<<<<< HEAD
-
-_For_any(T, S, R) T genericTest(T test, S steve, R ray) {
-  return test;
-}
-
-=======
->>>>>>> e8bfd5a14fa91446eda36e791cac3896fa98540d
 _For_any(T) _Ptr<T> ptrGenericTest(_Ptr<T> test, int num) {
   return test;
 }
@@ -23,7 +15,7 @@ _For_any(T) void arrayPtrGenericTest(_Array_ptr<T> test, int num) {
   return;
 }
 
-_For_any(T) int funcPtrGenericTest(_Ptr<T> a, _Ptr<T> b, int (*comparator)(_Ptr<T>, _Ptr<T>)) {
+_For_any(T) int funcPtrGenericTest(_Ptr<T> a, _Ptr<T> b, int(*comparator)(_Ptr<T>, _Ptr<T>)) {
   return 0;
 }
 
@@ -31,34 +23,10 @@ int compareFunction(_Ptr<int> a, _Ptr<int> b) {
   return 0;
 }
 
-<<<<<<< HEAD
-=======
-_For_any(T) void incompleteArrayTest(T test[]) {
-  return;
-}
-
-_For_any(T) void completeArrayTest(T test[10]) {
-  return;
-}
-
->>>>>>> e8bfd5a14fa91446eda36e791cac3896fa98540d
 void callPolymorphicTypes(void) {
   int t = 0;
   void *s;
   char *r;
-<<<<<<< HEAD
-  genericTest<signed int, void *, char *>(t, s, r);
-
-  // CHECK: CallExpr {{0x[0-9a-f]+}} <line:{{[0-9]+}}:{{[0-9]+}}, col:{{[0-9]+}}> 'int'
-  // CHECK-NEXT: ImplicitCastExpr {{0x[0-9a-f]+}} <col:{{[0-9]+}}> 'int (*)(int, void *, char *)' <FunctionToPointerDecay>
-  // CHECK-NEXT: DeclRefExpr {{0x[0-9a-f]+}} <col:{{[0-9]+}}> 'int (int, void *, char *)' instantiated Function {{0x[0-9a-f]+}} 'genericTest' '_For_any(3) T (T, S, R)'
-  // CHECK-NEXT: BuiltinType {{0x[0-9a-f]+}} 'int'
-  // CHECK-NEXT: PointerType {{0x[0-9a-f]+}} 'void *'
-  // CHECK-NEXT: BuiltinType {{0x[0-9a-f]+}} 'void'
-  // CHECK-NEXT: PointerType {{0x[0-9a-f]+}} 'char *'
-  // CHECK-NEXT: BuiltinType {{0x[0-9a-f]+}} 'char'
-=======
->>>>>>> e8bfd5a14fa91446eda36e791cac3896fa98540d
 
   _Ptr<int> pt = &t;
   ptrGenericTest<int>(pt, t);
@@ -77,34 +45,8 @@ void callPolymorphicTypes(void) {
 
   int result = funcPtrGenericTest<int>(pt, pt, &compareFunction);
 
-<<<<<<< HEAD
-  // CHECK: -CallExpr {{0x[0-9a-f]+}} <col:{{[0-9]+}}, col:{{[0-9]+}}> 'int'
-  // CHECK-NEXT: ImplicitCastExpr {{0x[0-9a-f]+}} <col:{{[0-9]+}}> 'int (*)(_Ptr<int>, _Ptr<int>, int (*)(_Ptr<int>, _Ptr<int>))' <FunctionToPointerDecay>
-  // CHECK-NEXT: DeclRefExpr {{0x[0-9a-f]+}} <col:{{[0-9]+}}> 'int (_Ptr<int>, _Ptr<int>, int (*)(_Ptr<int>, _Ptr<int>))' instantiated Function {{0x[0-9a-f]+}} 'funcPtrGenericTest' '_For_any(1) int (_Ptr<T>, _Ptr<T>, int (*)(_Ptr<T>, _Ptr<T>))'
-  // CHECK-NEXT: BuiltinType {{0x[0-9a-f]+}} 'int'
-=======
   // CHECK: CallExpr {{0x[0-9a-f]+}} <col:{{[0-9]+}}, col:{{[0-9]+}}> 'int'
   // CHECK-NEXT: ImplicitCastExpr {{0x[0-9a-f]+}} <col:{{[0-9]+}}> 'int (*)(_Ptr<int>, _Ptr<int>, int (*)(_Ptr<int>, _Ptr<int>))' <FunctionToPointerDecay>
   // CHECK-NEXT: DeclRefExpr {{0x[0-9a-f]+}} <col:{{[0-9]+}}> 'int (_Ptr<int>, _Ptr<int>, int (*)(_Ptr<int>, _Ptr<int>))' instantiated Function {{0x[0-9a-f]+}} 'funcPtrGenericTest' '_For_any(1) int (_Ptr<T>, _Ptr<T>, int (*)(_Ptr<T>, _Ptr<T>))'
   // CHECK-NEXT: BuiltinType {{0x[0-9a-f]+}} 'int'
-
-  int myArray[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-  incompleteArrayTest<int>(myArray);
-
-  // CHECK: CallExpr {{0x[0-9a-f]+}} <line:{{[0-9]+}}:{{[0-9]+}}, col:{{[0-9]+}}> 'void'
-  // CHECK-NEXT: ImplicitCastExpr {{0x[0-9a-f]+}} <col:{{[0-9]+}}> 'void (*)(int *)' <FunctionToPointerDecay>
-  // CHECK-NEXT: DeclRefExpr {{0x[0-9a-f]+}} <col:{{[0-9]+}}> 'void (int *)' instantiated Function {{0x[0-9a-f]+}} 'incompleteArrayTest' '_For_any(1) void (T *)'
-  // CHECK-NEXT: BuiltinType {{0x[0-9a-f]+}}  'int'
-  // CHECK-NEXT: ImplicitCastExpr {{0x[0-9a-f]+}} <col:{{[0-9]+}}> 'int *' <ArrayToPointerDecay>
-  // CHECK-NEXT: DeclRefExpr {{0x[0-9a-f]+}} <col:{{[0-9]+}}> 'int [10]' lvalue Var {{0x[0-9a-f]+}} 'myArray' 'int [10]'
-
-  completeArrayTest<int>(myArray);
-
-  // CHECK: CallExpr {{0x[0-9a-f]+}} <line:{{[0-9]+}}:{{[0-9]+}}, col:{{[0-9]+}}> 'void'
-  // CHECK-NEXT: ImplicitCastExpr {{0x[0-9a-f]+}} <col:{{[0-9]+}}> 'void (*)(int *)' <FunctionToPointerDecay>
-  // CHECK-NEXT: DeclRefExpr {{0x[0-9a-f]+}} <col:{{[0-9]+}}> 'void (int *)' instantiated Function {{0x[0-9a-f]+}} 'completeArrayTest' '_For_any(1) void (T *)'
-  // CHECK-NEXT: BuiltinType {{0x[0-9a-f]+}}  'int'
-  // CHECK-NEXT: ImplicitCastExpr {{0x[0-9a-f]+}} <col:{{[0-9]+}}> 'int *' <ArrayToPointerDecay>
-  // CHECK-NEXT: DeclRefExpr {{0x[0-9a-f]+}} <col:{{[0-9]+}}> 'int [10]' lvalue Var {{0x[0-9a-f]+}} 'myArray' 'int [10]'
->>>>>>> e8bfd5a14fa91446eda36e791cac3896fa98540d
 }
